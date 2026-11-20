@@ -1,6 +1,6 @@
-package dev.flyvisuals.mixin;
+package dev.kirpichvisuals.mixin;
 
-import dev.flyvisuals.effects.ParticleOptimizer;
+import dev.kirpichvisuals.effects.ParticleOptimizer;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.particle.ParticleEffect;
@@ -18,7 +18,7 @@ public abstract class ParticleManagerMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void flyvisuals$optimize(ParticleEffect parameters, double x, double y, double z,
+    private void kirpichvisuals$optimize(ParticleEffect parameters, double x, double y, double z,
                                      double velocityX, double velocityY, double velocityZ,
                                      CallbackInfoReturnable<Particle> cir) {
         if (ParticleOptimizer.shouldDrop(x, y, z)) {

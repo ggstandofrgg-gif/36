@@ -1,6 +1,6 @@
-package dev.flyvisuals.effects;
+package dev.kirpichvisuals.effects;
 
-import dev.flyvisuals.config.FlyConfig;
+import dev.kirpichvisuals.config.KirpichConfig;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -11,7 +11,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-/** Дополнительные частицы при ударе. Чисто визуально, на урон и логику не влияет. */
+/** Эффекты при ударе и регистрация остальных эффектов. Чисто визуально, на урон не влияет. */
 public final class HitEffects {
     private HitEffects() {
     }
@@ -21,15 +21,20 @@ public final class HitEffects {
             // событие общее для клиента и встроенного сервера, нужна только клиентская сторона
             MinecraftClient mc = MinecraftClient.getInstance();
             if (world.isClient() && player == mc.player && entity instanceof LivingEntity) {
+                TargetAura.mark(entity);
                 spawn(world, entity, mc);
             }
             return ActionResult.PASS;
         });
+
+        JumpCircle.register();
+        TargetAura.register();
+        AmbientParticles.register();
     }
 
     private static void spawn(World world, Entity target, MinecraftClient mc) {
-        FlyConfig cfg = FlyConfig.get();
-        if (!cfg.hitParticles || mc.player == null) {
+        KirpichConfig cfg = KirpichConfig.get();
+        if (mc.player == null) {
             return;
         }
         // слабые удары без заряда не украшаем, иначе спам кликами засыпает экран
@@ -37,22 +42,15 @@ public final class HitEffects {
             return;
         }
 
-        int count = cfg.particleCount;
-        if (cfg.optimizeParticles) {
-            int level = ParticleOptimizer.thinningLevel(cfg, mc.getCurrentFps());
-            count = level == 0 ? count : (level == 1 ? count / 2 : count / 4);
-        }
-        count = Math.max(1, count);
-
-        ParticleEffect effect = cfg.particleStyle.effect();
         Box box = target.getBoundingBox();
         double cx = (box.minX + box.maxX) / 2.0;
         double cy = box.minY + box.getLengthY() * 0.6;
         double cz = (box.minZ + box.maxZ) / 2.0;
         Random random = world.getRandom();
 
-        ParticleOptimizer.bypass = true;
-        try {
+        if (cfg.hitParticles) {
+            ParticleEffect effect = cfg.particleStyle.effect();
+            int count = EffectUtil.scaled(cfg.particleCount);
             for (int i = 0; i < count; i++) {
                 double ox = (random.nextDouble() - 0.5) * box.getLengthX();
                 double oy = (random.nextDouble() - 0.5) * box.getLengthY() * 0.6;
@@ -60,10 +58,22 @@ public final class HitEffects {
                 double vx = (random.nextDouble() - 0.5) * 0.5;
                 double vy = random.nextDouble() * 0.4;
                 double vz = (random.nextDouble() - 0.5) * 0.5;
-                world.addParticle(effect, cx + ox, cy + oy, cz + oz, vx, vy, vz);
+                EffectUtil.emit(world, effect, cx + ox, cy + oy, cz + oz, vx, vy, vz);
             }
-        } finally {
-            ParticleOptimizer.bypass = false;
+        }
+
+        if (cfg.hitBurst) {
+            // шар частиц: равномерно по сфере, летят наружу
+            ParticleEffect effect = cfg.burstStyle.effect();
+            int count = EffectUtil.scaled(24);
+            double speed = 0.18;
+            for (int i = 0; i < count; i++) {
+                double y = random.nextDouble() * 2.0 - 1.0;
+                double phi = random.nextDouble() * Math.PI * 2.0;
+                double r = Math.sqrt(1.0 - y * y);
+                EffectUtil.emit(world, effect, cx, cy, cz,
+                        r * Math.cos(phi) * speed, y * speed, r * Math.sin(phi) * speed);
+            }
         }
     }
 }

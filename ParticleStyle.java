@@ -1,9 +1,9 @@
-package dev.flyvisuals.config;
+package dev.kirpichvisuals.config;
 
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 
-/** Вид частиц при ударе. Используются только ванильные частицы. */
+/** Вид частиц для эффектов. Используются только ванильные частицы. */
 public enum ParticleStyle {
     CRIT,
     STARS,
@@ -11,7 +11,11 @@ public enum ParticleStyle {
     ENCHANT,
     FLAME,
     SOUL,
-    TOTEM;
+    TOTEM,
+    HEART,
+    SNOWFLAKE,
+    GLOW,
+    HAPPY;
 
     public ParticleEffect effect() {
         return switch (this) {
@@ -22,6 +26,10 @@ public enum ParticleStyle {
             case FLAME -> ParticleTypes.FLAME;
             case SOUL -> ParticleTypes.SOUL_FIRE_FLAME;
             case TOTEM -> ParticleTypes.TOTEM_OF_UNDYING;
+            case HEART -> ParticleTypes.HEART;
+            case SNOWFLAKE -> ParticleTypes.SNOWFLAKE;
+            case GLOW -> ParticleTypes.GLOW;
+            case HAPPY -> ParticleTypes.HAPPY_VILLAGER;
         };
     }
 

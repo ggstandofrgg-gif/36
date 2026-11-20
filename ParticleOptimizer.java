@@ -1,6 +1,6 @@
-package dev.flyvisuals.effects;
+package dev.kirpichvisuals.effects;
 
-import dev.flyvisuals.config.FlyConfig;
+import dev.kirpichvisuals.config.KirpichConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 
@@ -18,7 +18,7 @@ public final class ParticleOptimizer {
     }
 
     public static boolean shouldDrop(double x, double y, double z) {
-        FlyConfig cfg = FlyConfig.get();
+        KirpichConfig cfg = KirpichConfig.get();
         if (!cfg.optimizeParticles || bypass) {
             return false;
         }
@@ -44,7 +44,7 @@ public final class ParticleOptimizer {
     }
 
     /** 0 - без прореживания, 1 - мягкое, 2 - сильное. */
-    public static int thinningLevel(FlyConfig cfg, int fps) {
+    public static int thinningLevel(KirpichConfig cfg, int fps) {
         if (cfg.lowFpsThreshold <= 0 || fps <= 0) {
             return 0;
         }

@@ -1,11 +1,13 @@
-package dev.flyvisuals.hud;
+package dev.kirpichvisuals.hud;
 
-import dev.flyvisuals.config.Anchor;
-import dev.flyvisuals.config.FlyConfig;
+import dev.kirpichvisuals.config.Anchor;
+import dev.kirpichvisuals.config.KirpichConfig;
+import dev.kirpichvisuals.config.HudPos;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,23 +28,33 @@ public class PotionHud extends HudModule {
     private final Map<RegistryEntry<StatusEffect>, Integer> maxDuration = new HashMap<>();
 
     @Override
-    protected boolean enabled(FlyConfig cfg) {
+    public boolean enabled(KirpichConfig cfg) {
         return cfg.potionHud;
     }
 
     @Override
-    protected Anchor anchor(FlyConfig cfg) {
+    protected Anchor anchor(KirpichConfig cfg) {
         return cfg.potionAnchor;
     }
 
     @Override
-    protected int width() {
+    public HudPos position(KirpichConfig cfg) {
+        return cfg.potionPos;
+    }
+
+    @Override
+    public int width() {
         return W;
     }
 
     @Override
     protected int height() {
         return effects.size() * ROW + 6;
+    }
+
+    @Override
+    public int previewHeight() {
+        return 2 * ROW + 6;
     }
 
     @Override
@@ -73,31 +85,48 @@ public class PotionHud extends HudModule {
         for (StatusEffectInstance inst : effects) {
             RegistryEntry<StatusEffect> entry = inst.getEffectType();
             StatusEffect effect = entry.value();
-            int ry = y + 3 + i * ROW;
-
-            int color = HudUtil.opaque(effect.getColor());
-            ctx.fill(x + 6, ry + 1, x + 14, ry + 9, color);
 
             String name = effect.getName().getString();
             if (inst.getAmplifier() > 0) {
                 name += " " + HudUtil.roman(inst.getAmplifier() + 1);
             }
-            name = mc.textRenderer.trimToWidth(name, W - 62);
-            int nameColor = effect.isBeneficial() ? HudUtil.TEXT : HudUtil.TEXT_BAD;
-            ctx.drawText(mc.textRenderer, name, x + 18, ry + 1, nameColor, true);
 
             String time = inst.isInfinite() ? "∞" : HudUtil.time(inst.getDuration());
-            int timeColor = (!inst.isInfinite() && inst.getDuration() <= 100) ? HudUtil.TEXT_BAD : HudUtil.TEXT_DIM;
-            int tw = mc.textRenderer.getWidth(time);
-            ctx.drawText(mc.textRenderer, time, x + W - 6 - tw, ry + 1, timeColor, true);
+            boolean urgent = !inst.isInfinite() && inst.getDuration() <= 100;
 
             float fraction = 1f;
             if (!inst.isInfinite()) {
                 int max = Math.max(1, maxDuration.getOrDefault(entry, inst.getDuration()));
                 fraction = inst.getDuration() / (float) max;
             }
-            HudUtil.bar(ctx, x + 6, ry + 11, W - 12, 2, fraction, color);
+
+            row(ctx, x, y + 3 + i * ROW, effect.getColor(), name, effect.isBeneficial(), time, urgent, fraction);
             i++;
         }
+    }
+
+    @Override
+    public void drawPreview(DrawContext ctx, int x, int y, int accentRgb) {
+        HudUtil.panel(ctx, x, y, W, previewHeight(), accentRgb);
+        row(ctx, x, y + 3, 0x33EBFF,
+                Text.translatable("effect.minecraft.speed").getString() + " II", true, "1:30", false, 0.7f);
+        row(ctx, x, y + 3 + ROW, 0xE04040,
+                Text.translatable("effect.minecraft.strength").getString(), true, "0:45", false, 0.4f);
+    }
+
+    private void row(DrawContext ctx, int x, int ry, int colorRgb, String name, boolean beneficial,
+                     String time, boolean urgent, float fraction) {
+        int color = HudUtil.opaque(colorRgb);
+        ctx.fill(x + 6, ry + 1, x + 14, ry + 9, color);
+
+        String shown = mc.textRenderer.trimToWidth(name, W - 62);
+        int nameColor = beneficial ? HudUtil.TEXT : HudUtil.TEXT_BAD;
+        ctx.drawText(mc.textRenderer, shown, x + 18, ry + 1, nameColor, true);
+
+        int timeColor = urgent ? HudUtil.TEXT_BAD : HudUtil.TEXT_DIM;
+        int tw = mc.textRenderer.getWidth(time);
+        ctx.drawText(mc.textRenderer, time, x + W - 6 - tw, ry + 1, timeColor, true);
+
+        HudUtil.bar(ctx, x + 6, ry + 11, W - 12, 2, fraction, color);
     }
 }

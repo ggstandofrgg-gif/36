@@ -1,4 +1,4 @@
-package dev.flyvisuals.config;
+package dev.kirpichvisuals.config;
 
 /** Куда на экране прикрепляется HUD-модуль. */
 public enum Anchor {

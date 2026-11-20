@@ -1,7 +1,8 @@
-package dev.flyvisuals.hud;
+package dev.kirpichvisuals.hud;
 
-import dev.flyvisuals.config.Anchor;
-import dev.flyvisuals.config.FlyConfig;
+import dev.kirpichvisuals.config.Anchor;
+import dev.kirpichvisuals.config.KirpichConfig;
+import dev.kirpichvisuals.config.HudPos;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -39,23 +40,33 @@ public class CooldownHud extends HudModule {
     }
 
     @Override
-    protected boolean enabled(FlyConfig cfg) {
+    public boolean enabled(KirpichConfig cfg) {
         return cfg.cooldownHud;
     }
 
     @Override
-    protected Anchor anchor(FlyConfig cfg) {
+    protected Anchor anchor(KirpichConfig cfg) {
         return cfg.cooldownAnchor;
     }
 
     @Override
-    protected int width() {
+    public HudPos position(KirpichConfig cfg) {
+        return cfg.cooldownPos;
+    }
+
+    @Override
+    public int width() {
         return W;
     }
 
     @Override
     protected int height() {
         return entries.size() * ROW + 4;
+    }
+
+    @Override
+    public int previewHeight() {
+        return 2 * ROW + 4;
     }
 
     @Override
@@ -78,10 +89,22 @@ public class CooldownHud extends HudModule {
 
     @Override
     protected void draw(DrawContext ctx, int x, int y, int accentRgb) {
-        HudUtil.panel(ctx, x, y, W, height(), accentRgb);
+        drawEntries(ctx, x, y, accentRgb, entries);
+    }
+
+    @Override
+    public void drawPreview(DrawContext ctx, int x, int y, int accentRgb) {
+        drawEntries(ctx, x, y, accentRgb, List.of(
+                new Entry(attackIcon, 0.4f, true),
+                new Entry(stacks[0], 0.6f, false)
+        ));
+    }
+
+    private void drawEntries(DrawContext ctx, int x, int y, int accentRgb, List<Entry> list) {
+        HudUtil.panel(ctx, x, y, W, list.size() * ROW + 4, accentRgb);
 
         int i = 0;
-        for (Entry e : entries) {
+        for (Entry e : list) {
             int ry = y + 2 + i * ROW;
             ctx.drawItem(e.icon(), x + 5, ry + 2);
 

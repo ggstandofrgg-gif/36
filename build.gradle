@@ -19,7 +19,7 @@ sourceSets {
         }
         resources {
             srcDirs = ['.']
-            include 'fabric.mod.json', 'flyvisuals.mixins.json'
+            include 'fabric.mod.json', 'kirpichvisuals.mixins.json'
         }
     }
 }
@@ -37,7 +37,7 @@ processResources {
     // файлы переводов кладём туда, где их ждёт игра
     from(projectDir) {
         include 'en_us.json', 'ru_ru.json'
-        into 'assets/flyvisuals/lang'
+        into 'assets/kirpichvisuals/lang'
     }
 
     filesMatching("fabric.mod.json") {

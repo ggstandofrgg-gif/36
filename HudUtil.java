@@ -1,4 +1,4 @@
-package dev.flyvisuals.hud;
+package dev.kirpichvisuals.hud;
 
 import net.minecraft.client.gui.DrawContext;
 
@@ -21,6 +21,14 @@ public final class HudUtil {
     public static void panel(DrawContext ctx, int x, int y, int w, int h, int accentRgb) {
         ctx.fill(x, y, x + w, y + h, PANEL_BG);
         ctx.fill(x, y, x + 2, y + h, opaque(accentRgb));
+    }
+
+    /** Тонкая рамка вокруг прямоугольника (для режима перетаскивания). */
+    public static void outline(DrawContext ctx, int x, int y, int w, int h, int color) {
+        ctx.fill(x, y, x + w, y + 1, color);
+        ctx.fill(x, y + h - 1, x + w, y + h, color);
+        ctx.fill(x, y, x + 1, y + h, color);
+        ctx.fill(x + w - 1, y, x + w, y + h, color);
     }
 
     /** Горизонтальная полоска: фон + заполнение долей 0..1. */
