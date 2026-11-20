@@ -1,0 +1,96 @@
+package dev.flyvisuals.hud;
+
+import dev.flyvisuals.config.Anchor;
+import dev.flyvisuals.config.FlyConfig;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/** Перезарядки предметов (жемчуг, яблоки, щит...) и заряд атаки. */
+public class CooldownHud extends HudModule {
+    private static final int W = 104;
+    private static final int ROW = 20;
+
+    private static final Item[] TRACKED = {
+            Items.ENDER_PEARL,
+            Items.GOLDEN_APPLE,
+            Items.ENCHANTED_GOLDEN_APPLE,
+            Items.CHORUS_FRUIT,
+            Items.SHIELD,
+            Items.WIND_CHARGE,
+            Items.TRIDENT
+    };
+
+    private record Entry(ItemStack icon, float fill, boolean charging) {
+    }
+
+    private final ItemStack[] stacks = new ItemStack[TRACKED.length];
+    private final ItemStack attackIcon = new ItemStack(Items.IRON_SWORD);
+    private final List<Entry> entries = new ArrayList<>();
+
+    public CooldownHud() {
+        for (int i = 0; i < TRACKED.length; i++) {
+            stacks[i] = new ItemStack(TRACKED[i]);
+        }
+    }
+
+    @Override
+    protected boolean enabled(FlyConfig cfg) {
+        return cfg.cooldownHud;
+    }
+
+    @Override
+    protected Anchor anchor(FlyConfig cfg) {
+        return cfg.cooldownAnchor;
+    }
+
+    @Override
+    protected int width() {
+        return W;
+    }
+
+    @Override
+    protected int height() {
+        return entries.size() * ROW + 4;
+    }
+
+    @Override
+    protected boolean prepare() {
+        entries.clear();
+
+        float charge = mc.player.getAttackCooldownProgress(0f);
+        if (charge < 1f) {
+            entries.add(new Entry(attackIcon, charge, true));
+        }
+
+        for (ItemStack stack : stacks) {
+            float remaining = mc.player.getItemCooldownManager().getCooldownProgress(stack, 0f);
+            if (remaining > 0f) {
+                entries.add(new Entry(stack, remaining, false));
+            }
+        }
+        return !entries.isEmpty();
+    }
+
+    @Override
+    protected void draw(DrawContext ctx, int x, int y, int accentRgb) {
+        HudUtil.panel(ctx, x, y, W, height(), accentRgb);
+
+        int i = 0;
+        for (Entry e : entries) {
+            int ry = y + 2 + i * ROW;
+            ctx.drawItem(e.icon(), x + 5, ry + 2);
+
+            int barColor = e.charging() ? HudUtil.opaque(accentRgb) : HudUtil.lerpColor(0xFF5252, 0xFFD740, 1f - e.fill());
+            HudUtil.bar(ctx, x + 26, ry + 7, 46, 6, e.fill(), barColor);
+
+            String pct = Math.round(e.fill() * 100f) + "%";
+            ctx.drawText(mc.textRenderer, pct, x + 77, ry + 6, HudUtil.TEXT_DIM, true);
+            i++;
+        }
+    }
+}

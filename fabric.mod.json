@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "flyvisuals",
+  "version": "${version}",
+  "name": "FlyVisuals",
+  "description": "Чистый клиентский визуал: TargetHUD, таймеры зелий, кулдауны, эффекты ударов и оптимизация частиц. Не меняет геймплей.",
+  "authors": ["You"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.flyvisuals.FlyVisualsClient"]
+  },
+  "mixins": ["flyvisuals.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

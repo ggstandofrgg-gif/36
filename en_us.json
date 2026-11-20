@@ -1,0 +1,44 @@
+{
+  "flyvisuals.title": "FlyVisuals Settings",
+  "key.flyvisuals.open": "Open settings",
+  "key.categories.flyvisuals": "FlyVisuals",
+
+  "flyvisuals.opt.target": "TargetHUD",
+  "flyvisuals.opt.potions": "Potion timers",
+  "flyvisuals.opt.cooldowns": "Cooldowns",
+  "flyvisuals.opt.hits": "Hit particles",
+  "flyvisuals.opt.optimize": "Particle optimization",
+  "flyvisuals.opt.accent": "Accent",
+  "flyvisuals.opt.scale": "HUD scale",
+  "flyvisuals.opt.anchor_target": "TargetHUD position",
+  "flyvisuals.opt.anchor_potions": "Potions position",
+  "flyvisuals.opt.anchor_cooldowns": "Cooldowns position",
+  "flyvisuals.opt.style": "Hit style",
+  "flyvisuals.opt.count": "Particles per hit",
+  "flyvisuals.opt.distance": "Cull distance",
+  "flyvisuals.opt.lowfps": "Thin out below",
+  "flyvisuals.value.off": "off",
+
+  "flyvisuals.accent.0": "Ice",
+  "flyvisuals.accent.1": "Crimson",
+  "flyvisuals.accent.2": "Emerald",
+  "flyvisuals.accent.3": "Violet",
+  "flyvisuals.accent.4": "Gold",
+
+  "flyvisuals.anchor.TOP_LEFT": "Top left",
+  "flyvisuals.anchor.TOP_RIGHT": "Top right",
+  "flyvisuals.anchor.BOTTOM_LEFT": "Bottom left",
+  "flyvisuals.anchor.BOTTOM_RIGHT": "Bottom right",
+  "flyvisuals.anchor.CENTER": "Under crosshair",
+
+  "flyvisuals.style.CRIT": "Crit",
+  "flyvisuals.style.STARS": "Stars",
+  "flyvisuals.style.SPARKS": "Sparks",
+  "flyvisuals.style.ENCHANT": "Enchant",
+  "flyvisuals.style.FLAME": "Flame",
+  "flyvisuals.style.SOUL": "Soul fire",
+  "flyvisuals.style.TOTEM": "Totem",
+
+  "flyvisuals.hud.armor": "Armor",
+  "flyvisuals.hud.attack": "Attack charge"
+}

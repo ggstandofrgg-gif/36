@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "dev.flyvisuals.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ParticleManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

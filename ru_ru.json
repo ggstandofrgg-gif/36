@@ -1,0 +1,44 @@
+{
+  "flyvisuals.title": "Настройки FlyVisuals",
+  "key.flyvisuals.open": "Открыть настройки",
+  "key.categories.flyvisuals": "FlyVisuals",
+
+  "flyvisuals.opt.target": "TargetHUD",
+  "flyvisuals.opt.potions": "Таймеры зелий",
+  "flyvisuals.opt.cooldowns": "Кулдауны",
+  "flyvisuals.opt.hits": "Частицы ударов",
+  "flyvisuals.opt.optimize": "Оптимизация частиц",
+  "flyvisuals.opt.accent": "Цвет акцента",
+  "flyvisuals.opt.scale": "Масштаб HUD",
+  "flyvisuals.opt.anchor_target": "Позиция TargetHUD",
+  "flyvisuals.opt.anchor_potions": "Позиция зелий",
+  "flyvisuals.opt.anchor_cooldowns": "Позиция кулдаунов",
+  "flyvisuals.opt.style": "Стиль удара",
+  "flyvisuals.opt.count": "Частиц за удар",
+  "flyvisuals.opt.distance": "Дальность частиц",
+  "flyvisuals.opt.lowfps": "Прореживать ниже",
+  "flyvisuals.value.off": "выкл",
+
+  "flyvisuals.accent.0": "Лёд",
+  "flyvisuals.accent.1": "Багровый",
+  "flyvisuals.accent.2": "Изумруд",
+  "flyvisuals.accent.3": "Фиолетовый",
+  "flyvisuals.accent.4": "Золото",
+
+  "flyvisuals.anchor.TOP_LEFT": "Сверху слева",
+  "flyvisuals.anchor.TOP_RIGHT": "Сверху справа",
+  "flyvisuals.anchor.BOTTOM_LEFT": "Снизу слева",
+  "flyvisuals.anchor.BOTTOM_RIGHT": "Снизу справа",
+  "flyvisuals.anchor.CENTER": "Под прицелом",
+
+  "flyvisuals.style.CRIT": "Крит",
+  "flyvisuals.style.STARS": "Звёзды",
+  "flyvisuals.style.SPARKS": "Искры",
+  "flyvisuals.style.ENCHANT": "Зачарование",
+  "flyvisuals.style.FLAME": "Пламя",
+  "flyvisuals.style.SOUL": "Огонь душ",
+  "flyvisuals.style.TOTEM": "Тотем",
+
+  "flyvisuals.hud.armor": "Броня",
+  "flyvisuals.hud.attack": "Заряд атаки"
+}
